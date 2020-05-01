@@ -24,6 +24,9 @@ export default function EventContext({children}: { children?: React.ReactNode })
 
     const handleWSMessage = (event: Event) => {
         console.log('ws message!', event)
+        if (ws) {
+            ws.send('i got a message from you #cute')
+        }
     };
 
     const handleWSDisconnect = (event: Event) => {
@@ -36,15 +39,18 @@ export default function EventContext({children}: { children?: React.ReactNode })
 
     useEffect(() => {
         const newWS = new WebSocket(config.get('eventURL'))
-        newWS.onopen = handleWSConnect
-        newWS.onmessage = handleWSMessage
-        newWS.onclose = handleWSDisconnect
-        newWS.onerror = handleWSError
         setWSStatus(WSStatus.connecting);
         setWS(newWS);
     }, [])
 
-    console.log(ws)
+    useEffect(() => {
+        if (ws) {
+            ws.onopen = handleWSConnect
+            ws.onmessage = handleWSMessage
+            ws.onclose = handleWSDisconnect
+            ws.onerror = handleWSError
+        }
+    }, [ws])
 
     return (
         <Context.Provider
