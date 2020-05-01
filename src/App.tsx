@@ -1,18 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter} from 'react-router-dom';
+import {Router, publicRoutes} from 'route';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Carrot and Onion's bucket list app is loading...
-        </p>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <BrowserRouter>
+                <Router routes={publicRoutes}/>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
