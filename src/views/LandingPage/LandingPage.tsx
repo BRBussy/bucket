@@ -11,10 +11,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export interface LandingPageProps {
-    history: History
-}
-
 export default function LandingPage() {
     const classes = useStyles();
     const history = useHistory();

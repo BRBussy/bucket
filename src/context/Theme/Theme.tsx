@@ -2,6 +2,11 @@ import {ThemeProvider, createMuiTheme} from '@material-ui/core';
 import React from 'react';
 
 export const defaultTheme = createMuiTheme({
+    props: {
+        MuiTextField: {
+            margin: 'dense'
+        }
+    },
     shape: {
         borderRadius: 4
     },
