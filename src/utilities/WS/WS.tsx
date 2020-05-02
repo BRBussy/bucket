@@ -19,11 +19,6 @@ interface WSOpts {
     reconnect: boolean
 }
 
-// Time allowed to read next pong message from peer
-const pongWait = 30
-// Send pings to peer with this period. Must be less than pongWait.
-const pingPeriod = (pongWait * 9) / 10
-
 export default function useWS(
     {
         url,
@@ -81,19 +76,6 @@ export default function useWS(
                     onError();
                 }
             };
-
-            // close socket connection on browser reload
-            window.onbeforeunload = () => {
-                if (!ws) {
-                    return;
-                }
-                ws.onclose = () => null;
-                try {
-                    ws.close(1000, 'reload');
-                } catch (e) {
-                    console.error(`error closing web socket: ${e}`);
-                }
-            }
         } else {
             setState(WSState.disconnected);
         }
