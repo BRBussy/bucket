@@ -33,7 +33,6 @@ export default function useWS(
 ) {
     const [state, setState] = useState<WSState>(WSState.disconnected);
     const [ws, setWS] = useState<WebSocket | undefined>(undefined);
-    const [reconnectToggle, setReconnectToggle] = useState(false);
 
     // on first load and on reconnect
     useEffect(() => {
