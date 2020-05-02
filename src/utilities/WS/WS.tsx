@@ -49,20 +49,20 @@ export default function useWS(
     useEffect(() => {
         if (ws) {
             ws.onopen = (e: Event) => {
-                console.debug('web socket opened', e)
+                // console.debug('web socket opened', e)
                 setState(WSState.connected);
                 if (onOpen) {
                     onOpen();
                 }
             };
             ws.onmessage = (e: MessageEvent) => {
-                console.debug('web socket message', e)
+                // console.debug('web socket message', e)
                 if (onMessage) {
                     onMessage(e.data);
                 }
             };
             ws.onclose = (e: Event) => {
-                console.debug('web socket closed', e)
+                // console.debug('web socket closed', e)
                 setState(WSState.disconnected);
                 if (onClose) {
                     onClose();

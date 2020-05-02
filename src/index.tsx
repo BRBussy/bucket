@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import EventContext from 'context/event';
+import EventContext from 'context/Event';
 import config from 'react-global-configuration';
 
 let subdomain = 'localhost';
