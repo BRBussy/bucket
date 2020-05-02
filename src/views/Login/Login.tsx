@@ -2,13 +2,13 @@ import React from 'react'
 import {
     Button,
     makeStyles,
-    Card, CardContent, Grid,
-    TextField,
+    Card, CardContent,
+    TextField
 } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100vh',
+        height: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'

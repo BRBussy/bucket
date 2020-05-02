@@ -6,11 +6,10 @@ import background from 'assets/background.png'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        minHeight: '100vh',
         backgroundImage: `url(${background})`,
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        overflow: 'hidden'
     }
 }));
 
@@ -18,7 +17,10 @@ function App() {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div
+            className={classes.root}
+            style={{height: window.innerHeight}}
+        >
             <BrowserRouter>
                 <Router routes={publicRoutes}/>
             </BrowserRouter>
