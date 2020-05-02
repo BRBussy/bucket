@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import {CssBaseline} from '@material-ui/core';
 import * as serviceWorker from './serviceWorker';
 import EventContext from 'context/Event';
+import ThemeContext from 'context/Theme';
 import config from 'react-global-configuration';
 
 let subdomain = 'localhost';
@@ -30,9 +32,12 @@ if (subdomain === 'localhost') {
 
 ReactDOM.render(
     <React.StrictMode>
-        <EventContext>
-            <App/>
-        </EventContext>
+        <ThemeContext>
+            <CssBaseline/>
+            <EventContext>
+                <App/>
+            </EventContext>
+        </ThemeContext>
     </React.StrictMode>,
     document.getElementById('root')
 );
