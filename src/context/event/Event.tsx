@@ -4,20 +4,21 @@ import useWS from 'utilities/WS';
 
 // tslint:disable-next-line:no-empty-interface
 interface EventContext {
+    close: () => void;
 }
 
 const Context = React.createContext({} as EventContext);
 
 export default function EventContext({children}: { children?: React.ReactNode }) {
     const {
-        state
+        state,
+        closeWS
     } = useWS({url: config.get('eventURL')})
-
-    console.log('ws state:', state);
 
     return (
         <Context.Provider
             value={{
+                close: closeWS
             }}
         >
             {children}

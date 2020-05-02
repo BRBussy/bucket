@@ -3,7 +3,8 @@ import {Button} from '@material-ui/core'
 import {useEventContext} from 'context/event';
 
 export default function LandingPage() {
-    const eventContext = useEventContext();
+    const {
+    } = useEventContext();
 
     return (
         <div>

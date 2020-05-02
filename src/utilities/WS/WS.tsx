@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
 export enum WSState {
-    disconnected= 'disconnected',
+    disconnected = 'disconnected',
     connecting = 'connecting',
     connected = 'connected',
     error = 'error'
@@ -15,16 +15,32 @@ interface WSProps {
     onMessage?: (msg: string) => void;
 }
 
-export default function useWS({
-                                  url,
-                                  onOpen,
-                                  onClose,
-                                  onError,
-                                  onMessage
-                              }: WSProps) {
+interface WSOpts {
+    reconnect: boolean
+}
+
+// Time allowed to read next pong message from peer
+const pongWait = 30
+// Send pings to peer with this period. Must be less than pongWait.
+const pingPeriod = (pongWait * 9) / 10
+
+export default function useWS(
+    {
+        url,
+        onOpen,
+        onClose,
+        onError,
+        onMessage
+    }: WSProps,
+    {reconnect}: WSOpts = {
+        reconnect: true
+    }
+) {
     const [state, setState] = useState<WSState>(WSState.disconnected);
     const [ws, setWS] = useState<WebSocket | undefined>(undefined);
+    const [reconnectToggle, setReconnectToggle] = useState(false);
 
+    // on first load and on reconnect
     useEffect(() => {
         setState(WSState.connecting);
         try {
@@ -33,8 +49,9 @@ export default function useWS({
             console.error(`error starting web socket: ${e}`)
             setState(WSState.error);
         }
-    }, [url])
+    }, [url, reconnect])
 
+    // post creation of websocket
     useEffect(() => {
         if (ws) {
             ws.onopen = (e: Event) => {
@@ -64,12 +81,38 @@ export default function useWS({
                     onError();
                 }
             };
+
+            // close socket connection on browser reload
+            window.onbeforeunload = () => {
+                if (!ws) {
+                    return;
+                }
+                ws.onclose = () => null;
+                try {
+                    ws.close(1000, 'reload');
+                } catch (e) {
+                    console.error(`error closing web socket: ${e}`);
+                }
+            }
         } else {
             setState(WSState.disconnected);
         }
-    }, [ws, onOpen, onClose, onError])
+    }, [ws, onMessage, onOpen, onClose, onError]);
+
+    // function to manually close websocket
+    const closeWS = () => {
+        if (!ws) {
+            return;
+        }
+        try {
+            ws.close(1000, 'manual');
+        } catch (e) {
+            console.error(`error closing web socket: ${e}`);
+        }
+    }
 
     return {
-        state
+        state,
+        closeWS
     }
 }
