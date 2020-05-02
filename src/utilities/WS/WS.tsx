@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-enum WSState {
-    disconnected,
-    connecting,
-    connected,
-    error
+export enum WSState {
+    disconnected= 'disconnected',
+    connecting = 'connecting',
+    connected = 'connected',
+    error = 'error'
 }
 
 interface WSProps {
@@ -44,9 +44,11 @@ export default function useWS({
                     onOpen();
                 }
             };
-            ws.onmessage = (e: Event) => {
+            ws.onmessage = (e: MessageEvent) => {
                 console.debug('web socket message', e)
-                setState(WSState.disconnected);
+                if (onMessage) {
+                    onMessage(e.data);
+                }
             };
             ws.onclose = (e: Event) => {
                 console.debug('web socket closed', e)

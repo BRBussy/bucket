@@ -5,8 +5,6 @@ import {useEventContext} from 'context/event';
 export default function LandingPage() {
     const eventContext = useEventContext();
 
-    console.log(eventContext);
-
     return (
         <div>
             Landing page

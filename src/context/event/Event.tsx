@@ -1,61 +1,23 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import config from 'react-global-configuration';
+import useWS from 'utilities/WS';
 
-export enum WSStatus {
-    disconnected,
-    connecting,
-    connected,
-    error
-}
-
+// tslint:disable-next-line:no-empty-interface
 interface EventContext {
-    eventContextWSStatus: WSStatus;
 }
 
 const Context = React.createContext({} as EventContext);
 
 export default function EventContext({children}: { children?: React.ReactNode }) {
-    const [ws, setWS] = useState<WebSocket | undefined>(undefined);
-    const [wsStatus, setWSStatus] = useState<WSStatus>(WSStatus.disconnected);
+    const {
+        state
+    } = useWS({url: config.get('eventURL')})
 
-    const handleWSConnect = (event: Event) => {
-        console.log('ws connected!', event)
-    };
-
-    const handleWSMessage = (event: Event) => {
-        console.log('ws message!', event)
-        if (ws) {
-            ws.send('i got a message from you #cute')
-        }
-    };
-
-    const handleWSDisconnect = (event: Event) => {
-        console.log('ws disconnect!', event)
-    };
-
-    const handleWSError = (event: Event) => {
-        console.log('ws error!', event)
-    };
-
-    useEffect(() => {
-        const newWS = new WebSocket(config.get('eventURL'))
-        setWSStatus(WSStatus.connecting);
-        setWS(newWS);
-    }, [])
-
-    useEffect(() => {
-        if (ws) {
-            ws.onopen = handleWSConnect
-            ws.onmessage = handleWSMessage
-            ws.onclose = handleWSDisconnect
-            ws.onerror = handleWSError
-        }
-    }, [ws])
+    console.log('ws state:', state);
 
     return (
         <Context.Provider
             value={{
-                eventContextWSStatus: wsStatus
             }}
         >
             {children}
